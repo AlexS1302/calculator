@@ -15,6 +15,14 @@ function createSquares() {
     for (let i = 0; i < buttonLabels.length; i++) {
         const square = document.createElement("div");
         square.classList.add("square");
+
+        // Add classes for numbers and operators
+        if (isNaN(buttonLabels[i]) && buttonLabels[i] !== '.') {
+            square.classList.add("operator");
+        } else {
+            square.classList.add("number");
+        }
+
         square.textContent = buttonLabels[i];
 
         // Add id to the last button
@@ -60,20 +68,13 @@ function handleButtonPress(buttonText)  {
 
     switch (buttonText) {
         case 'AC':
-            currentInput = '';
-            previousInput = '';
-            operator = '';
-            resultDisplayed = false;
-            display.textContent = '0';
+            resetCalculator();
             break;
         case 'C':
-            currentInput = '';
-            resultDisplayed = false;
-            display.textContent = '0';
+            clearCurrentInput();
             break;
         case '=':
             calculateAndDisplayResult();
-            resultDisplayed = true;
             break;
         case '+':
         case '-':
@@ -81,19 +82,15 @@ function handleButtonPress(buttonText)  {
         case '/':
         case '%':
             handleOperator(buttonText);
-            resultDisplayed = false
             break;
         default:
-            if (resultDisplayed) {
-                currentInput = ''; 
-                resultDisplayed = false;
-            }
             handleNumberOrDecimal(buttonText);
             break;
     }
     updateDisplay();
 }
 
+// Helper functions
 function resetCalculator() {
     currentInput = '';
     previousInput = '';
@@ -106,12 +103,11 @@ function clearCurrentInput() {
     resultDisplayed = false;
 }
 
-
 function calculateAndDisplayResult() {
     if (operator && previousInput !== '' && currentInput !== '') {
         currentInput = calculateResult(parseFloat(previousInput), parseFloat(currentInput), operator).toString();
-        updateDisplay();
-        // Reset calculator
+        resultDisplayed = true;
+        // Reset previousInput and operator for new calculation
         previousInput = '';
         operator = '';
     }
@@ -119,25 +115,30 @@ function calculateAndDisplayResult() {
 }
 
 function handleOperator(op) {
+    if (resultDisplayed) {
+        previousInput = currentInput;
+        currentInput = '';
+    }
     if (currentInput !== '') {
         if (previousInput === '') {
             previousInput = currentInput;
         } else {
             previousInput = calculateResult(parseFloat(previousInput), parseFloat(currentInput), operator).toString();
-            
         }
         currentInput = '';
     }
     operator = op;
-    updateDisplay();
+    resultDisplayed = false;
 }
 
 function handleNumberOrDecimal(input) {
+    if (resultDisplayed) {
+        resetCalculator();
+    }
     if (input === '.' && currentInput.includes('.')) {
         return; // Prevent multiple decimals
     }
     currentInput += input;
-    updateDisplay();
 }
 
 function updateDisplay() {
