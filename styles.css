@@ -16,7 +16,7 @@ body {
     width: 500px;
     height: 700px;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: white;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     background-color: #0e490e;
