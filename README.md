@@ -14,7 +14,7 @@ Performs basic arithmetic operations with an intuitive interface.
 ## Technologies Used
 * HTML5
 * CSS3 (including Flexbox)
-* Javascript
+* JavaScript
 
 ## Project Link
 You can view this project [here](https://alexs1302.github.io/calculator/)!
